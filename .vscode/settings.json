@@ -1,8 +1,17 @@
 {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "cSpell.words": [
-        "tailwindcss",
-        "typecheck"
-    ]
+  "files.exclude": {
+    ".next": true,
+    ".husky": true,
+    "*ignore": true,
+    "*.prettierrc": true,
+    "*.eslintrc*.js*": true,
+    "*-lock.js*": true,
+    "node_modules*": true,
+    "public*": true,
+    "README.md*": true,
+    "validate.sh*": true,
+    "styles": true,
+    "tailwind.config.js": true,
+    "postcss.config.js": true,
+  }
 }
