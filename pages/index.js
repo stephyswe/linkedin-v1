@@ -1,8 +1,23 @@
+import { useSession, getSession } from 'next-auth/react'
 import Head from 'next/head'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 
 export default function Home() {
+  const { status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      // The user is not authenticated, handle it here.
+      router.push('/home')
+    }
+  })
+
+  if (status === 'loading') {
+    console.log('Loading or not authenticated')
+  }
+
+  console.log('user is logged in')
+
   return (
     <div className="bg-[#F3F2EF] dark:bg-black dark:text-white h-screen overflow-y-scroll md:space-y-6">
       <Head>
@@ -13,8 +28,8 @@ export default function Home() {
 
       <Header />
 
-      <main className="flex justify-center gap-x-5 px-4 sm:px-12">
-        <div className="flex flex-col md:flex-row gap-5">
+      <main className="flex justify-center px-4 gap-x-5 sm:px-12">
+        <div className="flex flex-col gap-5 md:flex-row">
           <Sidebar />
           {/* feed */}
         </div>
@@ -22,4 +37,21 @@ export default function Home() {
       </main>
     </div>
   )
+}
+
+export async function getServerSideProps(context) {
+  // Check if the user is authenticated on the server...
+  const session = await getSession(context)
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/home'
+      }
+    }
+  }
+
+  return {
+    props: { session }
+  }
 }
