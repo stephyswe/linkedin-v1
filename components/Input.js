@@ -5,9 +5,13 @@ import PhotoSizeSelectActualIcon from '@mui/icons-material/PhotoSizeSelectActual
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack'
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter'
 import ArticleIcon from '@mui/icons-material/Article'
+import { useRecoilState } from 'recoil'
+import { modalState, modalTypeState } from '../atoms/modelAtom'
 
 function Input() {
   const { data: session } = useSession()
+  const [modalOpen, setModalOpen] = useRecoilState(modalState)
+  const [modalType, setModalType] = useRecoilState(modalTypeState)
   return (
     <div
       className="bg-white dark:bg-[#1D2226] rounded-lg p-3 space-y-3 border
