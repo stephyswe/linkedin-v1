@@ -1,16 +1,19 @@
 import { AnimatePresence } from 'framer-motion'
+import { useRouter } from 'next/router'
 import { useSession, getSession } from 'next-auth/react'
 import Head from 'next/head'
 import { useRecoilState } from 'recoil'
 import { modalState, modalTypeState } from '../atoms/modalAtom'
+import { connectToDatabase } from '../util/mongodb'
 import Feed from '../components/Feed'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import Modal from '../components/Modal'
 
-export default function Home() {
+export default function Home({ posts }) {
   const [modalOpen, setModalOpen] = useRecoilState(modalState)
   const [modalType] = useRecoilState(modalTypeState)
+  const router = useRouter()
   const { status } = useSession({
     required: true,
     onUnauthenticated() {
@@ -38,7 +41,7 @@ export default function Home() {
       <main className="flex justify-center px-4 gap-x-5 sm:px-12">
         <div className="flex flex-col gap-5 md:flex-row">
           <Sidebar />
-          <Feed />
+          <Feed posts={posts} />
         </div>
         {/* widget */}
         <AnimatePresence>
@@ -63,7 +66,26 @@ export async function getServerSideProps(context) {
     }
   }
 
+  // Get posts on SSR
+  const { db } = await connectToDatabase()
+  const posts = await db
+    .collection('posts')
+    .find()
+    .sort({ timestamp: -1 })
+    .toArray()
+
   return {
-    props: { session }
+    props: {
+      session,
+      posts: posts.map((post) => ({
+        _id: post._id.toString(),
+        input: post.input,
+        photoUrl: post.photoUrl,
+        username: post.username,
+        email: post.email,
+        userImg: post.userImg,
+        createdAt: post.createdAt
+      }))
+    }
   }
 }
