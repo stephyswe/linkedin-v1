@@ -27,8 +27,6 @@ export default function Home({ posts, articles }) {
     console.log('Loading or not authenticated')
   }
 
-  console.log('user is logged in')
-
   return (
     <div className="bg-[#F3F2EF] dark:bg-black dark:text-white h-screen overflow-y-scroll md:space-y-6">
       <Head>

@@ -24,8 +24,7 @@ function Header() {
 
   // After mounting, we have access to the theme
   useEffect(() => setMounted(true), [])
-
-  console.log('Current theme is', theme)
+)
   return (
     <header
       className="sticky top-0 z-40 bg-white dark:bg-[#1D2226]
